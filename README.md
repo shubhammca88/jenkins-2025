@@ -15,7 +15,7 @@ Here are some common Jenkins terms and commands explained briefly:
 
 6. **Declarative Pipeline**: A type of Jenkins pipeline that uses a predefined structure, making it easier to define stages and steps.
 
-7. **Declarative Syntax Example**:
+7. **Declarative Syntax Example**
    ```groovy
    pipeline {
      agent any
