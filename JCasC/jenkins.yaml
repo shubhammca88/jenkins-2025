@@ -1,0 +1,168 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically by JCasC"
+  numExecutors: 2
+  mode: NORMAL
+  quietPeriod: 5
+  scmCheckoutRetryCount: 0
+  
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "{noop}admin123"
+        - id: "developer"
+          password: "{noop}dev123"
+        - id: "viewer"
+          password: "{noop}view123"
+          
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  remotingSecurity:
+    enabled: true
+
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+
+  markupFormatter:
+    plainText
+
+  projectNamingStrategy:
+    standard
+
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "JENKINS_HOME"
+            value: "/var/jenkins_home"
+
+unclassified:
+  location:
+    url: "http://localhost:8080/"
+    adminAddress: "admin@localhost"
+    
+  jenkinsfileScanner:
+    path: "/var/jenkins_home/jenkinsfiles"
+    
+  themeManager:
+    disableUserThemes: false
+    theme: "dark"
+    
+  shell:
+    shell: "/bin/bash"
+    
+  timestamper:
+    allPipelines: true
+    
+  buildDiscarders:
+    configuredBuildDiscarders:
+      - "jobBuildDiscarder"
+      
+  globalLibraries:
+    libraries:
+      - name: "shared-library"
+        defaultVersion: "main"
+        retriever:
+          modernSCM:
+            scm:
+              git:
+                remote: "https://github.com/user/shared-library.git"
+
+  mailer:
+    charset: "UTF-8"
+    useSsl: false
+    useTls: false
+    
+  pollSCM:
+    pollingThreadCount: 10
+
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  sSHD:
+    port: -1
+
+tool:
+  git:
+    installations:
+      - name: "Default"
+        home: "/usr/bin/git"
+        
+  jdk:
+    installations:
+      - name: "JDK11"
+        properties:
+          - installSource:
+              installers:
+                - adoptOpenJdkInstaller:
+                    id: "jdk-11.0.16+8"
+                    
+  maven:
+    installations:
+      - name: "Maven-3.8"
+        properties:
+          - installSource:
+              installers:
+                - maven:
+                    id: "3.8.6"
+                    
+  gradle:
+    installations:
+      - name: "Gradle-7"
+        properties:
+          - installSource:
+              installers:
+                - gradleInstaller:
+                    id: "7.5.1"
+                    
+  nodejs:
+    installations:
+      - name: "NodeJS-18"
+        properties:
+          - installSource:
+              installers:
+                - nodeJSInstaller:
+                    id: "18.17.0"
+                    
+  dockerTool:
+    installations:
+      - name: "Docker"
+        properties:
+          - installSource:
+              installers:
+                - dockerInstaller:
+                    version: "latest"
+
+
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "github-credentials"
+              username: "github-user"
+              password: "github-token"
+              description: "GitHub credentials"
+          - string:
+              scope: GLOBAL
+              id: "api-token"
+              secret: "your-api-token"
+              description: "API Token"
+          - sshUserPrivateKey:
+              scope: GLOBAL
+              id: "ssh-key"
+              username: "jenkins"
+              privateKeySource:
+                directEntry:
+                  privateKey: |
+                    -----BEGIN OPENSSH PRIVATE KEY-----
+                    # Your SSH private key here
+                    -----END OPENSSH PRIVATE KEY-----
+              description: "SSH Key for Git"
